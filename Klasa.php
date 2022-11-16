@@ -16,7 +16,7 @@ class user {
     public function register() : bool {
         $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
         $q = "INSERT INTO user VALUES (NULL, ?, ?, ?, ?)";
-        $db = new mysqli('localhost', 'root', '', 'Form');
+        $db = new mysqli('localhost', 'root', '', 'form');
         $pq = $db->prepare($q); 
         $pq->bind_param('ssss', $this->login, $passwordHash, 
                                             $this->FirstName, $this->LastName);
@@ -26,7 +26,7 @@ class user {
 
     public function login() : bool {
         $q = "SELECT * FROM user WHERE login = ? LIMIT 1";
-        $db = new mysqli('localhost', 'root', '', 'Form');
+        $db = new mysqli('localhost', 'root', '', 'form');
         $pq = $db->prepare($q); 
         $pq->bind_param('s', $this->login);
         $pq->execute();
