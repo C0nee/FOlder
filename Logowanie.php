@@ -1,15 +1,19 @@
-
 <?php
+require_once('config.php');
+
 if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
-    require_once('config.php');
-    require_once('Klasa.php');
-    $user = new User($_REQUEST['login'], $_REQUEST['password']);
+    $user = new user($_REQUEST['login'], $_REQUEST['password']);
     if($user->login()) {
-        $twig ->display('research.html.twig',["Text => błędny login lub hasło"]);
+        $v = array(
+            'message' => "Zalogowano poprawnie użytkownika: ".$user->getName(),
+        );
+        $twig->display('research.html.twig', $v);
     } else {
-        echo "Błędny login lub hasło";
+        $twig->display('research.html.twig', 
+                        ['message' => "Błędny login lub hasło"]);
     }
-}else{
-    $twig ->display('login.html.twig');
+} 
+    else {
+    $twig->display('login.html.twig');
 }
-?>    
+?>   
