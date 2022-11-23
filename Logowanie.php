@@ -1,6 +1,6 @@
 <?php
 require_once('config.php');
-
+require_once('Klasa.php');
 if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
     $user = new user($_REQUEST['login'], $_REQUEST['password']);
     if($user->login()) {
