@@ -1,5 +1,6 @@
 <?php
 class user {
+    //commit
     private int $id;
     private string $login;
     private string $password;
