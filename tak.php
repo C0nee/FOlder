@@ -1,7 +1,5 @@
 <?php
-require_once('Klasa.php');
 
-$user = new user('jkowalski', 'tajneHasło');
 /*
 if($user->register()) {
     echo "Zarejestrowano poprawnie";

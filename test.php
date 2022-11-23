@@ -1,4 +1,8 @@
 <?php
 require_once("config.php");
-$twig -> display("test.html.twig");
+
+$v = array(
+    'testVariable' =>'wartosc Testu'
+);
+$twig -> display("test.html.twig", $v);
 ?>
