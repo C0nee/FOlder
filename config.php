@@ -1,8 +1,8 @@
 <?php
 require_once('vendor/autoload.php');
 
-$loader = Twig\Loader\FilesystemLoader("/templates");
-
+$loader = new Twig\Loader\FilesystemLoader("templates");
+$twig = new Twig\Enviroment($loader);
 $db = new mysqli('localhost', 'root', '', 'form');
 
 
