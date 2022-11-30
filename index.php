@@ -63,5 +63,5 @@ Route::add('/register', function() {
     }
 }, 'post');
 
-Route::run('/loginform');
+Route::run('/FOlder');
 ?>
