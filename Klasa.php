@@ -12,6 +12,7 @@ class user {
         $this->password = $password;
         $this->FirstName = "";
         $this->LastName = "";
+        $this->db = &$db;
     }
 
     public function register() : bool {
