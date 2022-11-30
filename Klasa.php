@@ -1,5 +1,5 @@
 <?php
-class user {
+class User {
     private int $id;
     private mysqli $db;
     private string $login;
@@ -12,7 +12,6 @@ class user {
         $this->password = $password;
         $this->FirstName = "";
         $this->LastName = "";
-        $this->db = &$db;
     }
 
     public function register() : bool {
