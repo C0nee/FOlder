@@ -7,6 +7,26 @@ class User {
     private string $FirstName;
     private string $LastName;
 
+    public function __serialize() : array{
+        return array(
+            'id' =>$this->id,
+            'login' =>$this->login,
+            'password' =>$this->password,
+            'FirstName' =>$this->FirstName,
+            'LastName' =>$this->LastName,
+
+        );
+    }
+    public function __unserialize(array $data) {
+        $this->id = $data['id'];
+        $this->login = $data['login'];
+        $this->password = $data['password'];
+        $this->FirstName = $data['FirstName'];
+        $this->LastName = $data['LastName'];
+        global $db;
+        $this->db = &$db;
+    } 
+
     public function __construct(string $login, string $password) {
         $this->login = $login;
         $this->password = $password;
@@ -56,5 +76,15 @@ class User {
     public function getName() : string {
         return $this->FirstName . " " . $this->LastName;
     }
+    public function save() : bool {
+        $q = "UPDATE user SET
+                firstName = ?,
+                lastName = ?
+                WHERE id = ?";
+        $preparedQuery = $this->db->prepare($q);
+        $preparedQuery->bind_param("ssi", $this->firstName, $this->lastName, $this->id);
+        return $preparedQuery->execute();
+    }
 }
+
 ?>
