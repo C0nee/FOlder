@@ -11,8 +11,8 @@ Route::add('/', function() {
     if(isset($_SESSION['auth']))
         if($_SESSION['auth']) {
             //jesteśmy zalogowani
-            $user = $_SESSION['user'];
-            $v['user'] = $user;
+            $User = $_SESSION['User'];
+            $v['User'] = $User;
             
         }
     $twig->display('home.html.twig', $v);
@@ -28,12 +28,12 @@ Route::add('/login', function() {
 Route::add('/login', function() {
     global $twig;
     if(isset($_REQUEST['login']) && isset($_REQUEST['password'])) {
-        $user = new User($_REQUEST['login'], $_REQUEST['password']);
-        if($user->login()) {
+        $User = new User($_REQUEST['login'], $_REQUEST['password']);
+        if($User->login()) {
             $_SESSION['auth'] = true;
-            $_SESSION['user'] = $user;
+            $_SESSION['User'] = $User;
             $v = array(
-                'message' => "Zalogowano poprawnie użytkownika: ".$user->getName(),
+                'message' => "Zalogowano poprawnie użytkownika: ".$User->getName(),
             );
             $twig->display('message.html.twig', $v);
         } else {
@@ -59,10 +59,10 @@ Route::add('/register', function() {
                                 ['message' => "Nie podano wymaganej wartości"]);
                 exit();
             }
-        $user = new User($_REQUEST['login'], $_REQUEST['password']);
-        $user->setFirstName($_REQUEST['firstName']);
-        $user->setLastName($_REQUEST['lastName']);
-        if($user->register()) {
+        $User = new User($_REQUEST['login'], $_REQUEST['password']);
+        $User->setFirstName($_REQUEST['firstName']);
+        $User->setLastName($_REQUEST['lastName']);
+        if($User->register()) {
             //echo "Zarejestrowano poprawnie";
             $twig->display('message.html.twig', 
                                 ['message' => "Zarejestrowano poprawnie"]);
@@ -84,11 +84,11 @@ Route::add('/logout', function() {
 
 Route::add('/profile', function() {
     global $twig;
-    $user = $_SESSION['user'];
+    $User = $_SESSION['User'];
     //pobieramy imię i nazwisko rozdzielone spacją
-    $fullName = $user->getName();
+    $fullName = $User->getName();
     $fullName = explode(" ", $fullName); // "Imię nazwisko" => array ("Imię", "Nazwisko");
-    $v = array( 'user'      => $user,
+    $v = array( 'User'      => $User,
                 'firstName' => $fullName[0],
                 'lastName'  => $fullName[1],
             );
@@ -96,15 +96,38 @@ Route::add('/profile', function() {
 });
 Route::add('/profile', function() {
     global $twig;
-    if(isset($_REQUEST['firstName']) && isset($_REQUEST['lastName'])) {
-        $user = $_SESSION['user'];
-        $user->setFirstName($_REQUEST['firstName']);
-        $user->setLastName($_REQUEST['lastName']);
-        $user->save();
+    if(isset($_REQUEST['FirstName']) && isset($_REQUEST['LastName'])) {
+        $User = $_SESSION['User'];
+        $User->setFirstName($_REQUEST['FirstName']);
+        $User->setLastName($_REQUEST['LastName']);
+        $User->save();
         $twig->display('message.html.twig', 
                                 ['message' => "Zapisano zmiany w profilu"]);
     }
-}, "post");
+},"post");
+ if(isset($_REQUEST['password']) && isset($_REQUEST['passwordRepeat'])) {
+    //formularz zmiany hasła
+    $password = $_REQUEST['password'];
+    $passwordRepeat = $_REQUEST['passwordRepeat'];
+    if($password == $passwordRepeat) {
+        //hasła zgodne
+        $user = $_SESSION['user'];
+        if($user->changePassword($password)) {
+            $twig->display('message.html.twig', 
+                ['message' => "Hasło zostało zmienione"]);
+        } else {
+            $twig->display('message.html.twig', 
+                ['message' => "Nastąpił błąd!"]);
+        }
+    } else {
+        //hasła niezgodne
+        $twig->display('message.html.twig', 
+        ['message' => "Podane hasła nie są zgodne"]);
+    }
+
+} 
+
+
 
 
 

@@ -6,16 +6,23 @@ class User {
     private string $password;
     private string $FirstName;
     private string $LastName;
-
-    public function __serialize() : array{
-        return array(
-            'id' =>$this->id,
-            'login' =>$this->login,
-            'password' =>$this->password,
-            'FirstName' =>$this->FirstName,
-            'LastName' =>$this->LastName,
-
-        );
+    
+    public function __construct(string $login, string $password) {
+        $this->login = $login;
+        $this->password = $password;
+        $this->FirstName = "";
+        $this->LastName = "";
+        global $db;
+        $this->db = &$db;
+    }
+    public function __serialize() : array {
+        return array(   
+                        'id' => $this->id,
+                        'login' => $this->login,
+                        'password' => $this->password,
+                        'FirstName' => $this->FirstName,
+                        'LastName' => $this->LastName,
+                    );
     }
     public function __unserialize(array $data) {
         $this->id = $data['id'];
@@ -26,15 +33,10 @@ class User {
         global $db;
         $this->db = &$db;
     } 
+    
+     
 
-    public function __construct(string $login, string $password) {
-        $this->login = $login;
-        $this->password = $password;
-        $this->FirstName = "";
-        $this->LastName = "";
-        global $db;
-        $this->db = &$db;
-    }
+   
 
     public function register() : bool {
         $passwordHash = password_hash($this->password, PASSWORD_ARGON2I);
@@ -78,11 +80,20 @@ class User {
     }
     public function save() : bool {
         $q = "UPDATE user SET
-                firstName = ?,
-                lastName = ?
+                FirstName = ?,
+                LastName = ?
                 WHERE id = ?";
         $preparedQuery = $this->db->prepare($q);
-        $preparedQuery->bind_param("ssi", $this->firstName, $this->lastName, $this->id);
+        $preparedQuery->bind_param("ssi", $this->FirstName, $this->LastName, $this->id);
+        return $preparedQuery->execute();
+    }
+    public function changePassword(string $newPassword) : bool {
+        $newPassword = password_hash($newPassword, PASSWORD_ARGON2I);
+        $q = "UPDATE user SET
+                password = ?
+                WHERE id = ?";
+        $preparedQuery = $this->db->prepare($q);
+        $preparedQuery->bind_param("si", $newPassword, $this->id);
         return $preparedQuery->execute();
     }
 }

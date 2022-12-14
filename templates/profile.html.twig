@@ -3,13 +3,20 @@ Strona główna <br>
     {% if user is defined %}
         Jesteś zalogowany jako: {{user.getName()}} 
         <form action="" method="post">
-        <label for="firstNameID">Imię:</label><br>
-        <input type="text" name="firstName" id="firstNameID"{{firstName}}><br>
+        <label for="FirstNameID">Imię:</label><br>
+        <input type="text" name="FirstName" id="FirstNameID"{{FirstName}}><br>
         <label for="lastNameID">Nazwisko:</label><br>
-        <input type="text" name="lastName" id="lastNameID"{{lastName}}><br>
+        <input type="text" name="LastName" id="LastNameID"{{LastName}}><br>
         <input type="submit" value="Zapisz">
         
     </form>
+    <form action="" method="post">
+            <label for="passwordID">Nowe hasło:</label><br>
+            <input type="password" name="password" id="passwordID"><br>
+            <label for="passwordRepeatID">Powtórz hasło:</label><br>
+            <input type="password" name="passwordRepeat" id="passwordRepeatID"><br>
+            <input type="submit" value="Zmień hasło">
+        </form>
         <a href="/FOlder/logout/">Wyloguj</a>
     {% endif %}
    
